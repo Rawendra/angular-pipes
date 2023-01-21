@@ -1,16 +1,26 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <label> FilterString:</label> <input class="form-control" [(ngModel)]="filterStringInput" />
+      <label> FilterParameter:</label> 
+      <select class="form-control" name="filterParameter" id="cars"[(ngModel)]="filterParameter" >
+        <option *ngFor="let item of filterParameterList" [value]=item>{{item}}</option> 
+      </select>
+      {{filterParameter}}
       <ul class="list-group">
         <li
           class="list-group-item"
-          *ngFor="let server of servers"
-          [ngClass]="getStatusClasses(server)">
-          <span
-            class="badge">
+          *ngFor="
+            let server of servers | filterPipe : filterStringInput : filterParameter
+          "
+          [ngClass]="getStatusClasses(server)"
+        >
+          <span class="badge">
             {{ server.status }}
           </span>
-          <strong>{{ server.name }}</strong> | {{ server.instanceType }} | {{ server.started }}
+          <strong>{{ server.name | customPipe : 5 }}</strong> |
+          {{ server.instanceType | altEvenOdd : 3 }} |
+          {{ server.started | date : "fullDate" | altEvenOdd }}
         </li>
       </ul>
     </div>
